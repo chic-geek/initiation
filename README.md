@@ -18,3 +18,4 @@ There are 3 main Gulp commands you'll need to use:
 
 * Finish up writing `README.md`.
 * Find a more robust work-around for the setTimeout function in `$ gulp deploy` task.
+* Add ability to to compile coffeeScript files too.
