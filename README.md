@@ -1,4 +1,4 @@
-# Project initiation
+# Project pipeline
 
 This repository has been put together to enable projects **NOT** running Middleman or Rails frameworks to have a pre-determined asset-pipeline that is similar to the way in which those frameworks are put together only this uses Gulp.
 
