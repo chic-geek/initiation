@@ -44,7 +44,8 @@ var path = {
   build_images:  dir.build + folder.images,
   build_fonts:   dir.build + folder.fonts,
 
-  watch_styles:  dir.src + folder.styles + '**/*.scss'
+  watch_styles:  dir.src + folder.styles + '**/*.scss',
+  watch_scripts:  dir.src + folder.scripts + '**/*.js'
 };
 
 
@@ -90,7 +91,7 @@ gulp.task('fonts', function() {
 // WATCHING
 // --------------------------------------------------------------
 gulp.task('watch', function() {
-  gulp.watch(path.src_scripts, ['scripts']);
+  gulp.watch(path.watch_scripts, ['scripts']);
   gulp.watch(path.watch_styles, ['styles']);
   gulp.watch(path.src_images, ['images']);
   gulp.watch(path.src_fonts, ['fonts']);
