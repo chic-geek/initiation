@@ -8,7 +8,8 @@ var gulp         = require('gulp'),
     minifyCss    = require('gulp-minify-css'),
     out          = require('gulp-out'),
     uglify       = require('gulp-uglify')
-    autoprefixer = require('gulp-autoprefixer');
+    autoprefixer = require('gulp-autoprefixer')
+    connect      = require('gulp-connect');
 
 
 // PATHS
@@ -47,6 +48,16 @@ var path = {
   watch_styles:  dir.src + folder.styles + '**/*.scss',
   watch_scripts:  dir.src + folder.scripts + '**/*.js'
 };
+
+
+// SERVER
+// --------------------------------------------------------------
+gulp.task('connect', function() {
+  connect.server({
+    port: 5000,
+    livereload: true
+  });
+});
 
 
 // SCRIPTS
@@ -131,7 +142,7 @@ gulp.task('build', function() {
   gulp.start('fonts');
 });
 
-gulp.task('develop', function() {
+gulp.task('develop', ['connect'], function() {
   gulp.start('watch');
 });
 
