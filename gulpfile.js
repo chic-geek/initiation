@@ -1,57 +1,81 @@
 // PLUGINS
 // --------------------------------------------------------------
-var gulp         = require('gulp'),
-    sass         = require('gulp-ruby-sass'),
-    include      = require('gulp-include'),
-    imagemin     = require('gulp-imagemin'),
-    del          = require('del'),
-    minifyCss    = require('gulp-minify-css'),
-    out          = require('gulp-out'),
-    uglify       = require('gulp-uglify')
-    autoprefixer = require('gulp-autoprefixer')
-    connect      = require('gulp-connect');
+//
+var
+  // util plugins
+  gulp         = require('gulp'),
+  del          = require('del'),
+  out          = require('gulp-out'),
+  connect      = require('gulp-connect'),
+  fileinclude  = require('gulp-file-include'),
+
+  // style plugins
+  sass         = require('gulp-ruby-sass'),
+  minifyCss    = require('gulp-minify-css'),
+  autoprefixer = require('gulp-autoprefixer'),
+
+  // script plugins
+  include      = require('gulp-include'),
+  uglify       = require('gulp-uglify'),
+
+  // image plugins
+  imagemin     = require('gulp-imagemin');
+
 
 
 // PATHS
 // --------------------------------------------------------------
-var dir = {
-  src:   'source/',
-  build: 'build/assets/'
-}
+//
+var
+  settings = {
+    dir: {
+      src:  'source/',
+      dist: 'public/assets/'
+    },
 
-var folder = {
-  scripts: 'javascripts/',
-  styles:  'stylesheets/',
-  images:  'images/',
-  fonts:   'fonts/'
-};
+    folder: {
+      scripts: 'javascripts/',
+      styles:  'stylesheets/',
+      images:  'images/',
+      fonts:   'fonts/'
+    },
 
-var path = {
-  src_scripts:  dir.src + folder.scripts + '*.js',
-  src_styles:   dir.src + folder.styles,
+    server: {
+      port: 5000
+    }
+  };
 
-  src_images:   [dir.src + folder.images + '*.png',
-                 dir.src + folder.images + '*.jpg',
-                 dir.src + folder.images + '*.svg'],
+var
+  path = {
 
-  src_fonts:    [dir.src + folder.fonts + '*.eot',
-                 dir.src + folder.fonts + '*.svg',
-                 dir.src + folder.fonts + '*.ttf',
-                 dir.src + folder.fonts + '*.woff',
-                 dir.src + folder.fonts + '*.woff2'],
+    // source paths
+    src_scripts:  settings.dir.src + settings.folder.scripts + '*.js',
+    src_styles:   settings.dir.src + settings.folder.styles,
+    src_images:  [settings.dir.src + settings.folder.images + '*.png',
+                  settings.dir.src + settings.folder.images + '*.jpg',
+                  settings.dir.src + settings.folder.images + '*.svg'],
+    src_fonts:   [settings.dir.src + settings.folder.fonts + '*.eot',
+                  settings.dir.src + settings.folder.fonts + '*.svg',
+                  settings.dir.src + settings.folder.fonts + '*.ttf',
+                  settings.dir.src + settings.folder.fonts + '*.woff',
+                  settings.dir.src + settings.folder.fonts + '*.woff2'],
 
-  build_scripts: dir.build + folder.scripts,
-  build_styles:  dir.build + folder.styles,
-  build_images:  dir.build + folder.images,
-  build_fonts:   dir.build + folder.fonts,
+    // build paths
+    build_scripts: settings.dir.dist + settings.folder.scripts,
+    build_styles:  settings.dir.dist + settings.folder.styles,
+    build_images:  settings.dir.dist + settings.folder.images,
+    build_fonts:   settings.dir.dist + settings.folder.fonts,
 
-  watch_styles:  dir.src + folder.styles + '**/*.scss',
-  watch_scripts:  dir.src + folder.scripts + '**/*.js'
-};
+    // watch paths
+    watch_styles:  settings.dir.src + settings.folder.styles + '**/*.scss',
+    watch_scripts: settings.dir.src + settings.folder.scripts + '**/*.js'
+  };
+
 
 
 // SERVER
 // --------------------------------------------------------------
+//
 gulp.task('connect', function() {
   connect.server({
     port: 5000,
@@ -60,8 +84,10 @@ gulp.task('connect', function() {
 });
 
 
+
 // SCRIPTS
 // --------------------------------------------------------------
+//
 gulp.task('scripts', function() {
   return gulp.src(path.src_scripts)
     .pipe(include())
@@ -70,8 +96,10 @@ gulp.task('scripts', function() {
 });
 
 
+
 // STYLES
 // --------------------------------------------------------------
+//
 gulp.task('styles', function() {
   return sass(path.src_styles, {style: 'expanded'})
     .on('error', sass.logError)
@@ -80,8 +108,10 @@ gulp.task('styles', function() {
 });
 
 
+
 // IMAGES
 // --------------------------------------------------------------
+//
 gulp.task('images', function() {
   return gulp.src(path.src_images)
     .pipe(imagemin({
@@ -91,16 +121,20 @@ gulp.task('images', function() {
 });
 
 
+
 // FONTS
 // --------------------------------------------------------------
+//
 gulp.task('fonts', function() {
   return gulp.src(path.src_fonts)
     .pipe(gulp.dest(path.build_fonts));
 });
 
 
+
 // WATCHING
 // --------------------------------------------------------------
+//
 gulp.task('watch', function() {
   gulp.watch(path.watch_scripts, ['scripts']);
   gulp.watch(path.watch_styles, ['styles']);
@@ -109,8 +143,10 @@ gulp.task('watch', function() {
 });
 
 
+
 // UTILITIES
 // --------------------------------------------------------------
+//
 gulp.task('clean', function() {
   del([
     dir.build + folder.scripts,
@@ -133,8 +169,10 @@ gulp.task('squish-scripts', function() {
 });
 
 
+
 // GULP CLI TASKS
 // --------------------------------------------------------------
+//
 gulp.task('build', function() {
   gulp.start('scripts');
   gulp.start('styles');
@@ -154,6 +192,7 @@ gulp.task('deploy', ['clean'], function() {
     gulp.start('squish-scripts');
   }, 2000);
 });
+
 
 
 // NOTES:
