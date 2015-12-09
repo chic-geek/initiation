@@ -130,11 +130,6 @@ gulp.task('images', function() {
 gulp.task('fonts', function() {
   return gulp.src([
     settings.dir.source + settings.asset_dir.fonts + '**/*'
-    // settings.dir.source + settings.asset_dir.fonts + '*.eot',
-    // settings.dir.source + settings.asset_dir.fonts + '*.ttf',
-    // settings.dir.source + settings.asset_dir.fonts + '*.svg',
-    // settings.dir.source + settings.asset_dir.fonts + '*.woff',
-    // settings.dir.source + settings.asset_dir.fonts + '*.woff2'
   ])
 
   // pipe to the public destination.
