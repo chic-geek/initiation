@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-</head>
-<body>
-  @@include('partials/_header.html')
-  @@include('partials/_footer.html')
-</body>
+  <head>
+    <!-- page title -->
+    <title>Index.html</title>
+
+    <!-- meta tags -->
+    @@include('partials/_html-header.html')
+
+    <!-- stylesheets -->
+    @@include('partials/_stylesheets.html')
+
+    <!-- javascripts (vendor) -->
+    @@include('partials/_javascripts-vendor.html')
+  </head>
+
+  <body>
+    @@include('partials/view-partials/module1.html')
+    @@include('partials/view-partials/module2.html')
+
+    <!-- javascripts (modules) -->
+    @@include('partials/_javascripts-modules.html')
+  </body>
 </html>

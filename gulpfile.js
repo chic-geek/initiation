@@ -129,11 +129,12 @@ gulp.task('images', function() {
 //
 gulp.task('fonts', function() {
   return gulp.src([
-    settings.dir.source + settings.asset_dir.fonts + '*.eot',
-    settings.dir.source + settings.asset_dir.fonts + '*.ttf',
-    settings.dir.source + settings.asset_dir.fonts + '*.svg',
-    settings.dir.source + settings.asset_dir.fonts + '*.woff',
-    settings.dir.source + settings.asset_dir.fonts + '*.woff2'
+    settings.dir.source + settings.asset_dir.fonts + '**/*'
+    // settings.dir.source + settings.asset_dir.fonts + '*.eot',
+    // settings.dir.source + settings.asset_dir.fonts + '*.ttf',
+    // settings.dir.source + settings.asset_dir.fonts + '*.svg',
+    // settings.dir.source + settings.asset_dir.fonts + '*.woff',
+    // settings.dir.source + settings.asset_dir.fonts + '*.woff2'
   ])
 
   // pipe to the public destination.
@@ -152,6 +153,7 @@ gulp.task('fileinclude', function() {
     prefix: '@@',
     basepath: '@file'
   }))
+  .on('error', console.log)
   .pipe(gulp.dest(settings.dir.public));
 });
 
@@ -179,11 +181,11 @@ gulp.task('server', function() {
 // --------------------------------------------------------------
 //
 gulp.task('watch', function() {
-  gulp.watch( settings.dir.source + settings.asset_dir.scripts + '**/*.js', ['scripts']);
-  gulp.watch( settings.dir.source + settings.asset_dir.styles + '**/*.scss', ['styles']);
-  gulp.watch( settings.dir.source + settings.asset_dir.images, ['images']);
-  gulp.watch( settings.dir.source + settings.asset_dir.fonts, ['fonts']);
-  gulp.watch( settings.dir.source + '**/*.html', ['fileinclude']);
+  gulp.watch( settings.dir.source + settings.asset_dir.scripts + '/**/*', ['scripts']);
+  gulp.watch( settings.dir.source + settings.asset_dir.styles + '/**/*', ['styles']);
+  gulp.watch( settings.dir.source + settings.asset_dir.images + '/**/*', ['images']);
+  gulp.watch( settings.dir.source + settings.asset_dir.fonts + '/**/*', ['fonts']);
+  gulp.watch( settings.dir.source + '/**/*.html', ['fileinclude']);
 });
 
 
@@ -195,6 +197,17 @@ gulp.task('spring-clean', function() {
     settings.dir.public,
     settings.dir.dist
   ]);
+});
+
+
+// Copy EVERYTHING in public to dist directory
+// --------------------------------------------------------------
+//
+gulp.task('public-build', function() {
+  return gulp.src(
+    settings.dir.public + '/**/*', { base: './' + settings.dir.public }
+  )
+  .pipe(gulp.dest( settings.dir.dist ));
 });
 
 
@@ -233,15 +246,11 @@ gulp.task('compress-scripts', function() {
 // * gulp pipeline-clean // Cleans out both the public and dist directories.
 // * gulp pipeline-build // Collects everything up from public and minifies into dist dir.
 
-gulp.task('pipeline', function() {
-  gulp.start('scripts');
-  gulp.start('styles');
-  gulp.start('images');
-  gulp.start('fonts');
+gulp.task('pipeline', ['styles', 'scripts', 'images', 'fonts'], function() {
   gulp.start('watch');
 });
 
-gulp.task('pipeline-serve', ['server'], function() {
+gulp.task('pipeline-serve', ['server', 'fileinclude'], function() {
   gulp.start('pipeline');
 });
 
@@ -251,25 +260,11 @@ gulp.task('pipeline-clean', function() {
 });
 
 // cleans out everything then builds and minifies all assets
-gulp.task('pipeline-build', function() {
+gulp.task('pipeline-build', ['spring-clean', 'styles', 'scripts', 'images', 'fonts', 'fileinclude'], function() {
+  gulp.start('public-build');
 
-  // build out all assets
-  gulp.start('scripts');
-  gulp.start('styles');
-  gulp.start('images');
-  gulp.start('fonts');
-
-  // copy EVERYTHING in public to distribution directory.
-  setTimeout(function() {
-    gulp.start(function() {
-      return gulp.src('public/**/*', { base: './public'})
-      .pipe(gulp.dest( settings.dir.dist ));
-    });
-  }, 2000);
-
-  // compress and uglify project assets
-  setTimeout(function() {
+  setTimeout(function(){
     gulp.start('compress-styles');
     gulp.start('compress-scripts');
-  }, 4000);
+  }, 2000);
 });
