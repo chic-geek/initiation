@@ -13,7 +13,8 @@ var
   connect      = require('gulp-connect'),
   gulp         = require('gulp'),
   del          = require('del'),
-  out          = require('gulp-out')
+  out          = require('gulp-out'),
+  bower        = require('gulp-bower'),
 
   // styling plugins
   autoprefixer = require('gulp-autoprefixer'),
@@ -227,6 +228,16 @@ gulp.task('compress-scripts', function() {
 });
 
 
+// Bower asset installation
+// --------------------------------------------------------------
+//
+gulp.task('bower-install', function() {
+  return bower({
+    cmd: 'install'
+  });
+});
+
+
 
 
 // ==============================================================
@@ -241,7 +252,7 @@ gulp.task('compress-scripts', function() {
 // * gulp pipeline-clean // Cleans out both the public and dist directories.
 // * gulp pipeline-build // Collects everything up from public and minifies into dist dir.
 
-gulp.task('pipeline', ['styles', 'scripts', 'images', 'fonts'], function() {
+gulp.task('pipeline', ['styles', 'scripts', 'images', 'fonts', 'bower-install'], function() {
   gulp.start('watch');
 });
 
@@ -255,7 +266,7 @@ gulp.task('pipeline-clean', function() {
 });
 
 // cleans out everything then builds and minifies all assets
-gulp.task('pipeline-build', ['spring-clean', 'styles', 'scripts', 'images', 'fonts', 'fileinclude'], function() {
+gulp.task('pipeline-build', ['spring-clean', 'styles', 'scripts', 'images', 'fonts', 'bower-install', 'fileinclude'], function() {
   gulp.start('public-build');
 
   setTimeout(function(){

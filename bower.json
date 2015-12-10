@@ -1,0 +1,23 @@
+{
+  "name": "Your-project-title",
+  "description": "Your project description",
+  "main": "",
+  "authors": [
+    "Your name"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/chic-geek/pipeline",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    
+  }
+}
